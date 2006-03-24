@@ -1,0 +1,67 @@
+NAME
+    DBIx::Class::DateTime::Epoch - Automatic inflation/deflation of
+    epoch-based DateTime objects for DBIx::Class
+
+SYNOPSIS
+        package foo;
+    
+        use base qw( DBIx::Class );
+    
+        __PACKAGE__->load_components( qw( DateTime::Epoch Core ) );
+        __PACKAGE__->add_columns(
+            name => {
+                data_type => 'varchar',
+                size      => 10
+            },
+            bar => {
+                data_type => 'bigint',
+                epoch     => 1
+            },
+            creation_time => {
+                data_type => 'bigint',
+                epoch     => 'ctime'
+            },
+            modification_time => {
+                data_type => 'bigint',
+                epoch     => 'mtime'
+            }
+        );
+
+DESCRIPTION
+    This module automatically inflates/deflates DateTime objects
+    corresponding to applicable columns. Columns may also be defined to
+    specify their nature, such as columns representing a creation time (set
+    at time of insertion) or a modification time (set at time of every
+    update).
+
+METHODS
+  register_column
+    This method will automatically add inflation and deflation rules to a
+    column if an epoch value has been set in the column's definition. If the
+    epoch value is 'ctime' (creation time) or 'mtime' (modification time),
+    it will be registered as such for later use by the insert and the update
+    methods.
+
+  insert
+    This method will set the value of all registered creation time columns
+    to the current time. No changes will be made to a column whose value has
+    already been set.
+
+  update
+    This method will set the value of all registered modification time
+    columns to the current time. This will overwrite a column's value, even
+    if it has been already set.
+
+SEE ALSO
+    * DateTime
+    * DBIx::Class
+
+AUTHOR
+    * Brian Cassidy <bricas@cpan.org>
+
+COPYRIGHT AND LICENSE
+    Copyright 2006 by Brian Cassidy
+
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
