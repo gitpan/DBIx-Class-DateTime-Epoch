@@ -2,14 +2,15 @@
 use ExtUtils::MakeMaker;
 WriteMakefile
 (
+          'PL_FILES' => {},
+          'INSTALLDIRS' => 'site',
           'NAME' => 'DBIx::Class::DateTime::Epoch',
+          'EXE_FILES' => [],
           'VERSION_FROM' => 'lib/DBIx/Class/DateTime/Epoch.pm',
           'PREREQ_PM' => {
-                           'DBIx::Class' => '0',
-                           'DateTime' => '0',
-                           'Test::More' => '0'
-                         },
-          'INSTALLDIRS' => 'site',
-          'PL_FILES' => {}
+                           'Test::More' => 0,
+                           'DateTime' => 0,
+                           'DBIx::Class' => 0
+                         }
         )
 ;

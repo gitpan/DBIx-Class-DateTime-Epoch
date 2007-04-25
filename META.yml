@@ -1,8 +1,22 @@
---- #YAML:1.0
+---
 name: DBIx-Class-DateTime-Epoch
-version: 0.02
+version: 0.03
 author:
-  - Brian Cassidy <bricas@cpan.org>
+  - 'Brian Cassidy <bricas@cpan.org>'
 abstract: Automatic inflation/deflation of epoch-based DateTime objects for DBIx::Class
 license: perl
-generated_by: Module::Build version 0.2611, without YAML.pm
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  DBIx::Class: 0
+  DateTime: 0
+build_requires:
+  Test::More: 0
+provides:
+  DBIx::Class::DateTime::Epoch:
+    file: lib/DBIx/Class/DateTime/Epoch.pm
+    version: 0.03
+generated_by: Module::Build version 0.2807
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
