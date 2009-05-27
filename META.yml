@@ -1,22 +1,30 @@
 ---
-name: DBIx-Class-DateTime-Epoch
-version: 0.03
+abstract: 'Automatic inflation/deflation of epoch-based columns to/from DateTime objects'
 author:
   - 'Brian Cassidy <bricas@cpan.org>'
-abstract: Automatic inflation/deflation of epoch-based DateTime objects for DBIx::Class
+build_requires:
+  DBICx::TestDatabase: 0
+  ExtUtils::MakeMaker: 6.42
+  Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+distribution_type: module
+generated_by: 'Module::Install version 0.90'
 license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: DBIx-Class-DateTime-Epoch
+no_index:
+  directory:
+    - inc
+    - t
+requires:
+  DBIx::Class: 0.08103
+  DBIx::Class::TimeStamp: 0.07
+  DateTime: 0
+  perl: 5.6.1
 resources:
   license: http://dev.perl.org/licenses/
-requires:
-  DBIx::Class: 0
-  DateTime: 0
-build_requires:
-  Test::More: 0
-provides:
-  DBIx::Class::DateTime::Epoch:
-    file: lib/DBIx/Class/DateTime/Epoch.pm
-    version: 0.03
-generated_by: Module::Build version 0.2807
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.2.html
-  version: 1.2
+  repository: http://github.com/bricas/dbix-class-datetime-epoch
+version: 0.04

@@ -1,67 +1,81 @@
 NAME
     DBIx::Class::DateTime::Epoch - Automatic inflation/deflation of
-    epoch-based DateTime objects for DBIx::Class
+    epoch-based columns to/from DateTime objects
 
 SYNOPSIS
-        package foo;
-    
-        use base qw( DBIx::Class );
-    
-        __PACKAGE__->load_components( qw( DateTime::Epoch Core ) );
+        package MySchema::Foo;
+        
+    use base qw( DBIx::Class );
+        
+    __PACKAGE__->load_components( qw( DateTime::Epoch TimeStamp Core ) );
         __PACKAGE__->add_columns(
             name => {
                 data_type => 'varchar',
-                size      => 10
+                size      => 10,
             },
-            bar => {
-                data_type => 'bigint',
-                epoch     => 1
+            bar => { # epoch stored as an int
+                data_type        => 'bigint',
+                inflate_datetime => 1,
             },
+            baz => { # epoch stored as a string
+                data_type        => 'varchar',
+                size             => 50,
+                inflate_datetime => 'epoch',
+            },
+            # working in conjunction with DBIx::Class::TimeStamp
             creation_time => {
-                data_type => 'bigint',
-                epoch     => 'ctime'
+                data_type        => 'bigint',
+                inflate_datetime => 1,
+                set_on_create    => 1,
             },
             modification_time => {
-                data_type => 'bigint',
-                epoch     => 'mtime'
+                data_type        => 'bigint',
+                inflate_datetime => 1,
+                set_on_create    => 1,
+                set_on_update    => 1,
             }
         );
 
 DESCRIPTION
-    This module automatically inflates/deflates DateTime objects
-    corresponding to applicable columns. Columns may also be defined to
-    specify their nature, such as columns representing a creation time (set
-    at time of insertion) or a modification time (set at time of every
-    update).
+    This module automatically inflates/deflates DateTime objects from/to
+    epoch values for the specified columns. This module is essentially an
+    extension to DBIx::Class::InflateColumn::DateTime so all of the
+    settings, including "locale" and "timezone", are also valid.
+
+    A column will be recognized as an epoch time given one of the following
+    scenarios:
+
+    *   "data_type" is an "int" of some sort and "inflate_datetime" is also
+        set to a true value
+
+    *   "data_type" is some other value (e.g. "varchar") and
+        "inflate_datetime" is explicitly set to "epoch".
+
+    DBIx::Class::TimeStamp can also be used in conjunction with this module
+    to support epoch-based columns that are automatically set on creation of
+    a row and updated subsequent modifications.
 
 METHODS
-  register_column
-    This method will automatically add inflation and deflation rules to a
-    column if an epoch value has been set in the column's definition. If the
-    epoch value is 'ctime' (creation time) or 'mtime' (modification time),
-    it will be registered as such for later use by the insert and the update
-    methods.
+  _inflate_to_datetime( )
+    Overrides column inflation to use "Datetime->from_epoch".
 
-  insert
-    This method will set the value of all registered creation time columns
-    to the current time. No changes will be made to a column whose value has
-    already been set.
-
-  update
-    This method will set the value of all registered modification time
-    columns to the current time. This will overwrite a column's value, even
-    if it has been already set.
+  _deflate_from_datetime( )
+    Overrides column deflation to call "epoch()" on the column value.
 
 SEE ALSO
-    * DateTime
-    * DBIx::Class
+    *   DBIx::Class
 
-AUTHOR
-    * Brian Cassidy <bricas@cpan.org>
-    * Adam Paynter <adapay@cpan.org>
+    *   DBIx::Class::TimeStamp
+
+    *   DateTime
+
+AUTHORS
+    Brian Cassidy <bricas@cpan.org>
+
+    Adam Paynter <adapay@cpan.org>
 
 COPYRIGHT AND LICENSE
-    Copyright 2006 by Brian Cassidy
+    Copyright 2006-2009 by Brian Cassidy
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
