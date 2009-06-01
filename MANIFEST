@@ -14,7 +14,9 @@ META.yml
 README
 t/01-use.t
 t/02-schema.t
+t/03-compat.t
 t/98-pod_coverage.t
 t/99-pod.t
 t/lib/MySchema.pm
 t/lib/MySchema/Foo.pm
+t/lib/MySchema/FooCompat.pm

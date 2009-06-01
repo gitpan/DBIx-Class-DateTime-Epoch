@@ -3,13 +3,38 @@ package DBIx::Class::DateTime::Epoch;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use base qw( DBIx::Class );
 
 use DateTime;
 
-__PACKAGE__->load_components( qw/InflateColumn::DateTime/ );
+__PACKAGE__->load_components( qw( InflateColumn::DateTime ) );
+
+# back compat
+sub add_columns {
+    my( $class, @cols ) = @_;
+    my @columns;
+
+    while (my $col = shift @cols) {
+        my $info = ref $cols[0] ? shift @cols : {};
+
+        if( my $type = delete $info->{ epoch } ) {
+            $info->{ inflate_datetime } = 'epoch';
+
+            if( $type =~ m{^[cm]time$} ) {
+                __PACKAGE__->load_components( 'TimeStamp' );
+                $info->{ set_on_create } = 1;
+                $info->{ set_on_update } = 1 if $type eq 'mtime';
+            }
+        }
+
+        push @columns, $col => $info;
+
+    }
+
+    $class->next::method( @columns );
+}
 
 sub _inflate_to_datetime {
     my( $self, $value, $info, @rest ) = @_;
@@ -92,6 +117,10 @@ epoch-based columns that are automatically set on creation of a row and updated 
 modifications.
 
 =head1 METHODS
+
+=head2 add_columns( )
+
+Provides backwards compatibility with the older DateTime::Epoch API.
 
 =head2 _inflate_to_datetime( )
 

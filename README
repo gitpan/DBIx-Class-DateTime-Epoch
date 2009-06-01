@@ -56,6 +56,9 @@ DESCRIPTION
     a row and updated subsequent modifications.
 
 METHODS
+  add_columns( )
+    Provides backwards compatibility with the older DateTime::Epoch API.
+
   _inflate_to_datetime( )
     Overrides column inflation to use "Datetime->from_epoch".
 
