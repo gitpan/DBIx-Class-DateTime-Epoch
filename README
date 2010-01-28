@@ -4,10 +4,10 @@ NAME
 
 SYNOPSIS
         package MySchema::Foo;
-        
-    use base qw( DBIx::Class );
-        
-    __PACKAGE__->load_components( qw( DateTime::Epoch TimeStamp Core ) );
+    
+        use base qw( DBIx::Class );
+    
+        __PACKAGE__->load_components( qw( DateTime::Epoch TimeStamp Core ) );
         __PACKAGE__->add_columns(
             name => {
                 data_type => 'varchar',
@@ -78,7 +78,7 @@ AUTHORS
     Adam Paynter <adapay@cpan.org>
 
 COPYRIGHT AND LICENSE
-    Copyright 2006-2009 by Brian Cassidy
+    Copyright 2006-2010 by Brian Cassidy
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
