@@ -27,6 +27,10 @@ __PACKAGE__->add_columns(
         size             => 50,
         inflate_datetime => 'epoch',
     },
+    dt => { # regular datetime field -- should not conflict
+        data_type => 'datetime',
+        inflate_datetime => 1,
+    },
     # working in conjunction with DBIx::Class::TimeStamp
     creation_time => {
         data_type        => 'bigint',

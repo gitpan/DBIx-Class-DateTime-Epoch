@@ -3,7 +3,7 @@ package DBIx::Class::DateTime::Epoch;
 use strict;
 use warnings;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use base qw( DBIx::Class );
 
@@ -38,7 +38,7 @@ sub add_columns {
 
 sub _inflate_to_datetime {
     my( $self, $value, $info, @rest ) = @_;
-    $self->next::method( $value, $info, @rest )
+    return $self->next::method( $value, $info, @rest )
         unless $info->{ data_type } =~ m{int}i || $info->{ inflate_datetime } eq 'epoch';
 
     return DateTime->from_epoch( epoch => $value );
@@ -46,7 +46,7 @@ sub _inflate_to_datetime {
 
 sub _deflate_from_datetime {
     my( $self, $value, $info, @rest ) = @_;
-    $self->next::method( $value, $info, @rest )
+    return $self->next::method( $value, $info, @rest )
         unless $info->{ data_type } =~ m{int}i || $info->{ inflate_datetime } eq 'epoch';
 
     return $value->epoch;
@@ -150,7 +150,7 @@ Adam Paynter E<lt>adapay@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2006-2010 by Brian Cassidy
+Copyright 2006-2011 by Brian Cassidy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
