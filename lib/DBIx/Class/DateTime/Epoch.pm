@@ -3,7 +3,7 @@ package DBIx::Class::DateTime::Epoch;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use base qw( DBIx::Class );
 
@@ -39,7 +39,7 @@ sub add_columns {
 sub _inflate_to_datetime {
     my( $self, $value, $info, @rest ) = @_;
     return $self->next::method( $value, $info, @rest )
-        unless $info->{ data_type } =~ m{int}i || $info->{ inflate_datetime } eq 'epoch';
+        unless $info->{ data_type } =~ m{int}i || (exists $info->{ inflate_datetime } && $info->{ inflate_datetime } eq 'epoch');
 
     return DateTime->from_epoch( epoch => $value );
 }
@@ -47,7 +47,7 @@ sub _inflate_to_datetime {
 sub _deflate_from_datetime {
     my( $self, $value, $info, @rest ) = @_;
     return $self->next::method( $value, $info, @rest )
-        unless $info->{ data_type } =~ m{int}i || $info->{ inflate_datetime } eq 'epoch';
+        unless $info->{ data_type } =~ m{int}i || (exists $info->{ inflate_datetime } && $info->{ inflate_datetime } eq 'epoch');
 
     return $value->epoch;
 }
